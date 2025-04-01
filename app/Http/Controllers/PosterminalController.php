@@ -12,7 +12,7 @@ class PosterminalController extends Controller
      */
     public function index()
     {
-        return view('admin.dashboard.pos');
+        return view('admin.dashboard.posterminal.index');
     }
 
     /**

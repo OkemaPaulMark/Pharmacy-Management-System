@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Dashboard')
+@section('title', 'Pharmacy M.S')
 
 @section('content')
     <!-- Page Heading -->
