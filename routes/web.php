@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 Use App\Http\Controllers\DashboardController;
+Use App\Http\Controllers\PosterminalController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -20,3 +21,6 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
+Route::get('/saleshistory', [DashboardController::class, 'saleshistory']);
+
+Route::resource('posterminal', PosterminalController::class);

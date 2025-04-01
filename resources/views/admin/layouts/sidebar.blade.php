@@ -12,55 +12,110 @@
   
   <!-- Dashboard -->
   <li class="nav-item">
-    <a class="nav-link" href="#">
+  <a class="nav-link" href="{{url('dashboard')}}">
       <i class="fas fa-fw fa-tachometer-alt"></i>
       <span>Dashboard</span>
     </a>
   </li>
 
-  <!-- Inventory -->
-  <li class="nav-item">
-    <a class="nav-link collapsed" href="#collapseInventory" data-toggle="collapse" data-target="#collapseInventory">
-      <i class="fas fa-pills"></i>
-      <span>Inventory</span>
+    <!-- Sales -->
+    <li class="nav-item">
+    <a class="nav-link" href="{{ route('posterminal.index') }}">
+    <i class="fas fa-shopping-cart"></i>
+      <span>POS Terminal</span>
     </a>
-    <div id="collapseInventory" class="collapse" data-parent="#accordionSidebar">
+  </li>
+
+  <li class="nav-item">
+    <a class="nav-link" href="{{url('saleshistory')}}">
+    <i class="fas fa-history"></i>
+      <span>Sales History</span>
+    </a>
+  </li>
+
+ <!-- Medicines -->
+  <li class="nav-item">
+    <a class="nav-link collapsed" href="#collapseMedicines" data-toggle="collapse" data-target="#collapseMedicines">
+      <i class="fas fa-pills"></i>
+      <span>Medicines</span>
+    </a>
+    <div id="collapseMedicines" class="collapse" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
-        <a class="collapse-item" href="#">Medicine List</a>
-        <a class="collapse-item" href="#">Add Medicine</a>
-        <a class="collapse-item" href="#">Expiry Alerts</a>
+        <h6 class="collapse-header">Medicine Operations</h6>
+        <!-- <a class="collapse-item" href="/medicines/list">
+          <i class="fas fa-list mr-2"></i>Medicine List
+        </a> -->
+        <a class="collapse-item" href="/medicines/add">
+          <i class="fas fa-plus-circle mr-2"></i>Add Medicine
+        </a>
+        <a class="collapse-item" href="/medicines/categories">
+          <i class="fas fa-tags mr-2"></i>Categories
+        </a>
       </div>
     </div>
   </li>
 
-  <!-- Sales -->
-  <li class="nav-item">
-    <a class="nav-link" href="#">
-      <i class="fas fa-cash-register"></i>
-      <span>Quick Sale (POS)</span>
+   <!-- Inventory -->
+   <li class="nav-item">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseInventory">
+      <i class="fas fa-list"></i>
+      <span>Inventory</span>
     </a>
+    <div id="collapseInventory" class="collapse" data-parent="#accordionSidebar">
+      <div class="bg-white py-2 collapse-inner rounded">
+        <h6 class="collapse-header">Inventory Operations</h6>
+        <a class="collapse-item" href="/inventory/list">
+          <i class="fas fa-truck-loading mr-2"></i>Suppliers
+        </a>
+        <a class="collapse-item" href="/inventory/add">
+          <i class="fas fa-plus-circle mr-2"></i>Add Stock
+        </a>
+      </div>
+    </div>
   </li>
 
-  <!-- Prescriptions -->
+  <!-- Patients -->
   <li class="nav-item">
-    <a class="nav-link collapsed" href="#collapseRx" data-toggle="collapse">
-      <i class="fas fa-prescription-bottle-alt"></i>
-      <span>Prescriptions</span>
+    <a class="nav-link collapsed" href="#collapsePatients" data-toggle="collapse" data-target="#collapsePatients">
+      <i class="fas fa-user-injured"></i>
+      <span>Patients</span>
     </a>
-    <div id="collapseRx" class="collapse">
-      <div class="collapse-inner">
-        <a class="collapse-item" href="#">New Rx</a>
-        <a class="collapse-item" href="#">Pending</a>
+    <div id="collapsePatients" class="collapse" data-parent="#accordionSidebar">
+      <div class="bg-white py-2 collapse-inner rounded">
+        <h6 class="collapse-header">Patient Management</h6>
+        <!-- <a class="collapse-item" href="/patients/list">
+          <i class="fas fa-address-book mr-2"></i>Patient Records
+        </a> -->
+        <a class="collapse-item" href="/patients/add">
+          <i class="fas fa-user-plus mr-2"></i>Add New Patient
+        </a>
+        <a class="collapse-item" href="/patients/history">
+          <i class="fas fa-file-medical mr-2"></i>Medical History
+        </a>
       </div>
     </div>
   </li>
 
   <!-- Reports -->
   <li class="nav-item">
-    <a class="nav-link" href="#">
+    <a class="nav-link collapsed" href="#collapseReports" data-toggle="collapse" data-target="#collapseReports">
       <i class="fas fa-chart-bar"></i>
       <span>Reports</span>
     </a>
+    <div id="collapseReports" class="collapse" data-parent="#accordionSidebar">
+      <div class="bg-white py-2 collapse-inner rounded">
+        <h6 class="collapse-header">Report Types</h6>
+        <a class="collapse-item" href="/reports/sales">
+          <i class="fas fa-coins mr-2"></i>Sales Reports
+        </a>
+        <a class="collapse-item" href="/reports/inventory">
+          <i class="fas fa-boxes mr-2"></i>Inventory Reports
+        </a>
+        <a class="collapse-item" href="/reports/expiry">
+          <i class="fas fa-exclamation-triangle mr-2"></i>Expiry Alerts
+        </a>
+      </div>
+    </div>
   </li>
 
 </ul>
