@@ -2,29 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AddMedicine;
-use App\Models\Category;
-use App\Models\PosTransaction;
+use App\Models\Posterminal;
 use Illuminate\Http\Request;
 
-class PosterminalController extends Controller
+class SalesreportController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $medicines = AddMedicine::with('category')->get();
-        $categories = Category::all();
-        
-        return view('pharmacist.dashboard.posterminal.index', compact('medicines', 'categories'));
+        $sales = Posterminal::getSalesReport();
+        $totalSales = $sales->sum('total');
+
+        return view('admin.dashboard.salesreport.index', compact('sales', 'totalSales'));
     }
+
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        //
+        return view('admin.dashboard.salesreport.create');
     }
 
     /**
@@ -33,56 +32,71 @@ class PosterminalController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'medicine_id' => 'required|exists:medicines,id',
+            'medicine_id' => 'required|exists:add_medicines,id',
             'category_id' => 'required|exists:categories,id',
-            'quantity' => 'required|integer|min:1',
             'unit_price' => 'required|numeric|min:0',
+            'quantity' => 'required|integer|min:1',
             'total' => 'required|numeric|min:0',
             'prescription' => 'nullable|string',
         ]);
 
-        $transaction = PosTerminal::create([
-            'medicine_id' => $request->medicine_id,
-            'category_id' => $request->category_id,
-            'quantity' => $request->quantity,
-            'unit_price' => $request->unit_price,
-            'total' => $request->total,
-            'prescription' => $request->prescription,
-            'user_id' => auth()->id(),
-        ]);
+        $validated['user_id'] = auth()->id();
 
-        return response()->json(['success' => true, 'transaction' => $transaction]);
+        Posterminal::create($validated);
+
+        return redirect()->route('salesreports.index')
+            ->with('success', 'Sale recorded successfully!');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Sale $sale)
+    public function show(string $id)
     {
-        //
+        $sale = Posterminal::with(['medicine', 'category', 'user'])->findOrFail($id);
+        return view('admin.dashboard.salesreport.show', compact('sale'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Sale $sale)
+    public function edit(string $id)
     {
-        //
+        $sale = Posterminal::findOrFail($id);
+        return view('admin.dashboard.salesreport.edit', compact('sale'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Sale $sale)
+    public function update(Request $request, string $id)
     {
-        //
+        $sale = Posterminal::findOrFail($id);
+
+        $validated = $request->validate([
+            'medicine_id' => 'required|exists:add_medicines,id',
+            'category_id' => 'required|exists:categories,id',
+            'unit_price' => 'required|numeric|min:0',
+            'quantity' => 'required|integer|min:1',
+            'total' => 'required|numeric|min:0',
+            'prescription' => 'nullable|string',
+        ]);
+
+        $sale->update($validated);
+
+        return redirect()->route('salesreports.index')
+            ->with('success', 'Sale updated successfully!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Sale $sale)
+    public function destroy(string $id)
     {
-        //
+        $sale = Posterminal::findOrFail($id);
+        $sale->delete();
+
+        return redirect()->route('salesreports.index')
+            ->with('success', 'Sale record deleted successfully!');
     }
 }
