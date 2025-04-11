@@ -26,7 +26,7 @@
                             <th>Price</th>
                             <th>Quantity</th>
                             <th>Total</th>
-                            
+
                         </tr>
                     </thead>
                     <tbody>
@@ -37,7 +37,7 @@
                             <td>$5</td>
                             <td>10</td>
                             <td>$50</td>
-                        
+
                         </tr>
                         <tr>
                             <td>2</td>
@@ -46,7 +46,7 @@
                             <td>$8</td>
                             <td>5</td>
                             <td>$40</td>
-                         
+
                         </tr>
                         <tr>
                             <td>3</td>
@@ -81,7 +81,7 @@
 @push('scripts')
     <!-- Page level plugins -->
     <script src="{{ asset('vendor/chart.js/Chart.min.js') }}"></script>
-    
+
     <!-- Page level custom scripts -->
     <script src="{{ asset('js/demo/chart-area-demo.js') }}"></script>
     <script src="{{ asset('js/demo/chart-pie-demo.js') }}"></script>

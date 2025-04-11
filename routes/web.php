@@ -72,7 +72,21 @@ Route::resource('patients', PatientController::class);
 
 Route::resource('medicalhistories', MedicalhistoryController::class);
 
-Route::resource('salesreports', SalesreportController::class);
+Route::middleware(['auth'])->group(function () {
+    // Sales Reports Resource Route
+    Route::resource('salesreports', SalesreportController::class)->except(['create', 'store']);
+
+    // Additional routes for sales reports
+    Route::prefix('salesreports')->group(function () {
+        Route::get('/create', [SalesreportController::class, 'create'])
+            ->name('salesreports.create')
+            ->middleware('can:create-sales');
+
+        Route::post('/', [SalesreportController::class, 'store'])
+            ->name('salesreports.store')
+            ->middleware('can:create-sales');
+    });
+});
 
 Route::resource('expiryalerts', ExpiryalertsController::class);
 
