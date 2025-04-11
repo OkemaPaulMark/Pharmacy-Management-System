@@ -25,10 +25,21 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
-
         $request->session()->regenerate();
-
-        return redirect()->intended(route('dashboard', absolute: false));
+    
+        $user = Auth::user();
+        
+        // Ensure role exists and is valid
+        if (!in_array($user->role, ['admin', 'pharmacist'])) {
+            Auth::logout();
+            return redirect('/login')->with('error', 'Invalid user role');
+        }
+    
+        if ($user->role === 'admin') {
+            return redirect()->route('dashboard');
+        }
+        
+        return redirect()->route('pharmacist.dashboard');
     }
 
     /**

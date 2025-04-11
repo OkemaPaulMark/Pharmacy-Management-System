@@ -10,8 +10,11 @@ class DashboardController extends Controller
         return view('admin.dashboard.list');
      }
 
-     public function saleshistory(Request $request){
-        return view('admin.dashboard.saleshistory');
+     public function index(Request $request){
+        return view('pharmacist.dashboard.list');
      }
- }
 
+     public function saleshistory(Request $request){
+      return view('pharmacist.dashboard.saleshistory');
+   }
+ }

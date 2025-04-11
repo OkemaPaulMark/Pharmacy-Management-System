@@ -18,21 +18,6 @@
     </a>
   </li>
 
-    <!-- Sales -->
-    <li class="nav-item">
-    <a class="nav-link" href="{{ route('posterminal.index') }}">
-    <i class="fas fa-shopping-cart"></i>
-      <span>POS Terminal</span>
-    </a>
-  </li>
-
-  <li class="nav-item">
-    <a class="nav-link" href="{{url('saleshistory')}}">
-    <i class="fas fa-history"></i>
-      <span>Sales History</span>
-    </a>
-  </li>
-
  <!-- Medicines -->
   <li class="nav-item">
     <a class="nav-link collapsed" href="#collapseMedicines" data-toggle="collapse" data-target="#collapseMedicines">
@@ -45,10 +30,10 @@
         <!-- <a class="collapse-item" href="/medicines/list">
           <i class="fas fa-list mr-2"></i>Medicine List
         </a> -->
-        <a class="collapse-item" href="/medicines/add">
+        <a class="collapse-item" href="{{ route('medicines.index') }}">
           <i class="fas fa-plus-circle mr-2"></i>Add Medicine
         </a>
-        <a class="collapse-item" href="/medicines/categories">
+        <a class="collapse-item" href="{{ route('categories.index') }}">
           <i class="fas fa-tags mr-2"></i>Categories
         </a>
       </div>
@@ -64,10 +49,10 @@
     <div id="collapseInventory" class="collapse" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
         <h6 class="collapse-header">Inventory Operations</h6>
-        <a class="collapse-item" href="/inventory/list">
+        <a class="collapse-item" href="{{ route('suppliers.index') }}">
           <i class="fas fa-truck-loading mr-2"></i>Suppliers
         </a>
-        <a class="collapse-item" href="/inventory/add">
+        <a class="collapse-item" href="{{ route('stocks.index') }}">
           <i class="fas fa-plus-circle mr-2"></i>Add Stock
         </a>
       </div>
@@ -75,7 +60,7 @@
   </li>
 
   <!-- Patients -->
-  <li class="nav-item">
+  <!-- <li class="nav-item">
     <a class="nav-link collapsed" href="#collapsePatients" data-toggle="collapse" data-target="#collapsePatients">
       <i class="fas fa-user-injured"></i>
       <span>Patients</span>
@@ -83,18 +68,16 @@
     <div id="collapsePatients" class="collapse" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
         <h6 class="collapse-header">Patient Management</h6>
-        <!-- <a class="collapse-item" href="/patients/list">
-          <i class="fas fa-address-book mr-2"></i>Patient Records
-        </a> -->
-        <a class="collapse-item" href="/patients/add">
+
+        <a class="collapse-item" href="{{ route('patients.index') }}">
           <i class="fas fa-user-plus mr-2"></i>Add New Patient
         </a>
-        <a class="collapse-item" href="/patients/history">
+        <a class="collapse-item" href="{{ route('medicalhistories.index') }}">
           <i class="fas fa-file-medical mr-2"></i>Medical History
         </a>
       </div>
     </div>
-  </li>
+  </li> -->
 
   <!-- Reports -->
   <li class="nav-item">
@@ -105,13 +88,13 @@
     <div id="collapseReports" class="collapse" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
         <h6 class="collapse-header">Report Types</h6>
-        <a class="collapse-item" href="/reports/sales">
+        <a class="collapse-item" href="{{ route('salesreports.index') }}">
           <i class="fas fa-coins mr-2"></i>Sales Reports
         </a>
-        <a class="collapse-item" href="/reports/inventory">
+        <a class="collapse-item" href="{{ route('inventoryreports.index') }}">
           <i class="fas fa-boxes mr-2"></i>Inventory Reports
         </a>
-        <a class="collapse-item" href="/reports/expiry">
+        <a class="collapse-item" href="{{ route('expiryalerts.index') }}">
           <i class="fas fa-exclamation-triangle mr-2"></i>Expiry Alerts
         </a>
       </div>

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Sale;
+use App\Models\AddMedicine;
+use App\Models\Category;
+use App\Models\PosTransaction;
 use Illuminate\Http\Request;
 
 class PosterminalController extends Controller
@@ -12,9 +14,11 @@ class PosterminalController extends Controller
      */
     public function index()
     {
-        return view('admin.dashboard.posterminal.index');
+        $medicines = AddMedicine::with('category')->get();
+        $categories = Category::all();
+        
+        return view('pharmacist.dashboard.posterminal.index', compact('medicines', 'categories'));
     }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -28,7 +32,26 @@ class PosterminalController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'medicine_id' => 'required|exists:medicines,id',
+            'category_id' => 'required|exists:categories,id',
+            'quantity' => 'required|integer|min:1',
+            'unit_price' => 'required|numeric|min:0',
+            'total' => 'required|numeric|min:0',
+            'prescription' => 'nullable|string',
+        ]);
+
+        $transaction = PosTerminal::create([
+            'medicine_id' => $request->medicine_id,
+            'category_id' => $request->category_id,
+            'quantity' => $request->quantity,
+            'unit_price' => $request->unit_price,
+            'total' => $request->total,
+            'prescription' => $request->prescription,
+            'user_id' => auth()->id(),
+        ]);
+
+        return response()->json(['success' => true, 'transaction' => $transaction]);
     }
 
     /**
