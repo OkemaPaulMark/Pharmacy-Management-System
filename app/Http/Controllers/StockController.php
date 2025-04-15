@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Stock; 
+use App\Models\Stock;
 use App\Models\Supplier;
 
 
@@ -14,12 +14,12 @@ class StockController extends Controller
      */
     public function index()
     {
-        $stocks = Stock::with('supplier')->orderBy('created_at', 'desc')->paginate(2);
+        $stocks = Stock::with('supplier')->orderBy('created_at', 'desc')->paginate(10);
         $suppliers = Supplier::all();
 
         return view('admin.dashboard.stock.index', compact('stocks', 'suppliers'));
     }
-    
+
 
     /**
      * Show the form for creating a new resource.
@@ -81,7 +81,7 @@ public function create()
         $suppliers = Supplier::all();
         return view('admin.dashboard.stock.edit', compact('stock', 'suppliers'));
     }
-    
+
 
     /**
      * Update the specified resource in storage.

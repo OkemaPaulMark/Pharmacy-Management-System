@@ -15,13 +15,13 @@ class CreateStocksTable extends Migration
     {
         Schema::create('stocks', function (Blueprint $table) {
             $table->id();
-            $table->string('medicine');               
-            $table->foreignId('supplier_id')->constrained()->onDelete('cascade');  
-            $table->integer('quantity');              
-            $table->date('expiry_date');              
-            $table->decimal('unit_cost', 8, 2);       
-            $table->date('purchase_date');            
-            $table->timestamps();                     
+            $table->string('medicine');
+            $table->foreignId('supplier_id')->constrained()->onDelete('cascade');
+            $table->integer('quantity');
+            $table->date('expiry_date');
+            $table->decimal('unit_cost', 8, 2);
+            $table->date('purchase_date');
+            $table->timestamps();
         });
     }
 

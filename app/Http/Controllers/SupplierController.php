@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Supplier; 
+use App\Models\Supplier;
 
 class SupplierController extends Controller
 {
@@ -12,10 +12,10 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        $suppliers = Supplier::orderBy('created_at', 'desc')->paginate(3);
+        $suppliers = Supplier::orderBy('created_at', 'desc')->paginate(10);
         return view('admin.dashboard.supplier.index', compact('suppliers'));
     }
-    
+
 
     /**
      * Show the form for creating a new resource.
