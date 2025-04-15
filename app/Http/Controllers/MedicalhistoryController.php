@@ -13,15 +13,13 @@ class MedicalhistoryController extends Controller
      */
     public function index()
     {
-    $patients = Patient::orderBy('full_name')->pluck('full_name', 'id');
-        $histories = PatientHistory::with('patient')->latest()->get();
+        $patients = Patient::orderBy('full_name')->pluck('full_name', 'id');
+        // Using paginate to display 10 records per page
+        $histories = PatientHistory::with('patient')->latest()->paginate(3);
 
         return view('pharmacist.dashboard.medicalhistory.index', compact('patients', 'histories'));
     }
     
-    
-    
-
     /**
      * Show the form for creating a new resource.
      */
@@ -72,24 +70,42 @@ class MedicalhistoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $history = PatientHistory::findOrFail($id); 
+        $patients = Patient::all();
+    
+        return view('pharmacist.dashboard.medicalhistory.edit', compact('history', 'patients'));
     }
+    
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'blood_group' => 'required',
+            'allergies' => 'nullable|string',
+            'chronic_conditions' => 'nullable|string',
+            'current_medications' => 'nullable|string',
+            'patient_id' => 'required|exists:patients,id',
+        ]);
+    
+        $history = PatientHistory::findOrFail($id);
+        $history->update($request->all());
+    
+        return redirect()->route('medicalhistories.index')->with('success', 'Medical history updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $history = PatientHistory::findOrFail($id);
+        $history->delete();
+    
+        return redirect()->route('medicalhistories.index')->with('success', 'Medical history deleted successfully.');
     }
 }

@@ -53,18 +53,26 @@
                         <td>{{ $medicine->expiry_date->format('d/m/Y') }}</td>
                         <td>{{ Str::limit($medicine->description, 30) }}</td>
                         <td>
-                            <a href="#" class="btn btn-info btn-sm">View</a>
-                            <a href="#" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="{{ route('medicines.show', $medicine->id) }}" class="btn btn-info btn-sm">View</a>
+                            <a href="{{ route('medicines.edit', $medicine->id) }}" class="btn btn-warning btn-sm">Edit</a>
                             <form action="{{ route('medicines.destroy', $medicine->id) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                <button type="submit" class="btn btn-danger btn-sm" 
+                                        onclick="return confirm('Are you sure you want to delete {{ $medicine->name }}? This action cannot be undone!')">
+                                    Delete
+                                </button>
                             </form>
                         </td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
+                <!-- Pagination Controls -->
+                <div class="d-flex justify-content-between">
+                    {{ $medicines->links('pagination::bootstrap-4') }}
+                </div>
+
         </div>
     </div>
 </div>

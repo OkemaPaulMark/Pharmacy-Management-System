@@ -125,14 +125,15 @@
                 <button type="button" id="printInvoiceBtn" class="btn btn-primary">
                     <i class="fas fa-print"></i> Print
                 </button>
-                <button type="button" id="downloadPdfBtn" class="btn btn-success">
-                    <i class="fas fa-file-pdf"></i> Download PDF
+                <button type="button" id="saveDataBtn" class="btn btn-success">
+                    <i class="fas fa-save"></i> Save Data
                 </button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
+
 
 @endsection
 
@@ -206,11 +207,40 @@ $(document).ready(function() {
         window.print();
     });
     
-    // Download PDF
-    $('#downloadPdfBtn').click(function() {
-        // Implement PDF download functionality here
-        alert('PDF download functionality would be implemented here');
-    });
+        // Save data to database
+        $('#saveDataBtn').click(function() {
+            $.ajax({
+                url: '{{ route("posterminal.store") }}', // Use Laravel named route
+                method: 'POST',
+                data: {
+                    transactions: cart,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    alert(response.message); // Show success message
+                    $('#checkoutModal').modal('hide');
+                    cart = []; // Clear cart
+                    updateCartDisplay(); // Update cart display
+                },
+                error: function(xhr) {
+                    console.error(xhr.responseJSON);
+                    alert('Error saving transaction: ' + (xhr.responseJSON.message || 'Unknown error'));
+                }
+            });
+        });
+
+
+        function downloadPdf() {
+            // Implement your PDF generation logic here
+            // This could be a route that returns a PDF download
+            window.location.href = '/generate-pdf?cart=' + JSON.stringify(cart);
+            
+            // For now we'll just show a success message
+            alert('Transactions saved to database and PDF downloaded!');
+            $('#checkoutModal').modal('hide');
+            cart = [];
+            updateCartDisplay();
+        }
     
     function updateCartDisplay() {
         const $cartItems = $('#cartItems');

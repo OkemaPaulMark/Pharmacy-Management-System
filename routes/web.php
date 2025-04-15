@@ -54,11 +54,16 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-Route::get('/saleshistory', [DashboardController::class, 'saleshistory']);
+use App\Http\Controllers\SaleshistoryController;
+
+Route::get('/saleshistory', [SaleshistoryController::class, 'index'])->name('sales.history');
 
 Route::get('/pharmacist-dashboard', [DashboardController::class, 'pharmacist']);
 
 Route::resource('posterminal', PosterminalController::class);
+
+Route::post('/save-pos-data', [PosterminalController::class, 'store'])->name('posterminal.store');
+
 
 Route::resource('medicines', MedicineController::class);
 
