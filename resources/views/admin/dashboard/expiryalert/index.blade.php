@@ -55,6 +55,10 @@
                     @endforelse
                     </tbody>
                 </table>
+                <!-- Pagination Controls -->
+                <div class="d-flex justify-content-between">
+                    {{ $stocks->links('pagination::bootstrap-4') }}
+                </div>
             </div>
         </div>
     </div>

@@ -15,7 +15,7 @@ class ExpiryalertsController extends Controller
     {
         // Fetch all stock records with their supplier relationship
         // Removed category relationship loading
-        $stocks = Stock::with('supplier')->get();
+        $stocks = Stock::with('supplier')->paginate(10);
         return view('admin.dashboard.expiryalert.index', compact('stocks'));
     }
 
