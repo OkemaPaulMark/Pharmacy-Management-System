@@ -118,4 +118,6 @@ class SalesreportController extends Controller
         // Redirect to index with success message
         return redirect()->route('salesreport.index')->with('success', 'Transaction deleted successfully.');
     }
+
+
 }
