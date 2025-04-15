@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\AddMedicine; 
+use App\Models\AddMedicine;
 use App\Models\Stock;
-use App\Models\Category; 
-use App\Models\Supplier; 
+use App\Models\Category;
+use App\Models\Supplier;
 
 class MedicineController extends Controller
 {
@@ -15,15 +15,15 @@ class MedicineController extends Controller
      */
     public function index()
     {
-        $medicines = AddMedicine::orderBy('created_at', 'desc')->paginate(3);
+        $medicines = AddMedicine::orderBy('created_at', 'desc')->paginate(10);
         $stocks = Stock::with('medicine')->get();
         $categories = Category::all();
         $suppliers = Supplier::all();
-        
+
         return view('admin.dashboard.medicine.index', compact(
-            'medicines', 
-            'stocks', 
-            'categories', 
+            'medicines',
+            'stocks',
+            'categories',
             'suppliers'
         ));
     }
@@ -45,11 +45,11 @@ class MedicineController extends Controller
             'expiry_date' => 'required|date|after:today',
             'description' => 'nullable|string',
         ]);
-    
+
         $stock = Stock::findOrFail($request->medicine_id);
         $category = Category::findOrFail($request->category);
         $supplier = Supplier::findOrFail($request->supplier);
-    
+
         AddMedicine::create([
             'name' => $stock->medicine,
             'category_id' => $category->id, // Store the category ID
@@ -62,13 +62,13 @@ class MedicineController extends Controller
             'description' => $request->description,
             'medicine_id' => $request->medicine_id,
         ]);
-    
+
         return redirect()->route('medicines.index')
                          ->with('success', 'Medicine added successfully!');
     }
-    
-    
-    
+
+
+
     /**
      * Display the specified resource.
      */
@@ -86,7 +86,7 @@ class MedicineController extends Controller
         $stocks = Stock::with('medicine')->get();
         $categories = Category::all();
         $suppliers = Supplier::all();
-        
+
         return view('admin.dashboard.medicine.edit', compact(
             'medicine',
             'stocks',
@@ -138,9 +138,9 @@ class MedicineController extends Controller
     {
         $medicine = AddMedicine::findOrFail($id);
         $medicineName = $medicine->name;
-        
+
         $medicine->delete();
-        
+
         return redirect()->route('medicines.index')
                          ->with('success', "Medicine '$medicineName' has been deleted successfully!");
     }

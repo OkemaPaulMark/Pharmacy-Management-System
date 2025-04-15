@@ -44,9 +44,9 @@
                                 <td>{{ $index + 1 }}</td>
 
                                 <td>{{ $transaction->medicine->name ?? 'N/A' }}</td>
-                                <td>${{ number_format($transaction->unit_price, 2) }}</td>
+                                <td>{{ number_format($transaction->unit_price, 2) }}</td>
                                 <td>{{ $transaction->quantity }}</td>
-                                <td>${{ number_format($transaction->total, 2) }}</td>
+                                <td>{{ number_format($transaction->total, 2) }}</td>
                                 <td>{{ $transaction->created_at->format('M d, Y H:i') }}</td>
                             </tr>
                         @empty
@@ -58,7 +58,7 @@
                     <tfoot>
                         <tr>
                             <td colspan="6" class="text-right font-weight-bold">Total Sales:</td>
-                            <td colspan="2" class="font-weight-bold">${{ number_format($totalSales, 2) }}</td>
+                            <td colspan="2" class="font-weight-bold">UGX{{ number_format($totalSales, 2) }}</td>
                         </tr>
                     </tfoot>
                 </table>
@@ -71,7 +71,7 @@
     <!-- Page level plugins -->
     <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
-    
+
     <!-- Page level custom scripts -->
     <script>
         $(document).ready(function() {
