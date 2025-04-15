@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Category; 
+use App\Models\Category;
 
 class CategoryController extends Controller
 {
@@ -12,10 +12,10 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::orderBy('created_at', 'desc')->paginate(1);
+        $categories = Category::orderBy('created_at', 'desc')->paginate(5);
         return view('admin.dashboard.category.index', compact('categories'));
     }
-    
+
 
     /**
      * Show the form for creating a new resource.

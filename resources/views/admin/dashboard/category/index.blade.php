@@ -32,7 +32,7 @@
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $category->category }}</td>
-                        <td>{{ $category->description }}</td>
+                        <td>{{ Str::limit($category->description, 150) }}</td>
                         <td>
                             <a href="{{ route('categories.show', $category->id) }}" class="btn btn-info btn-sm">View</a>
 

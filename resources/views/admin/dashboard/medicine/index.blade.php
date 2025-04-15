@@ -47,7 +47,7 @@
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $medicine->name }}</td>
                         <td>{{ $medicine->category->category ?? $medicine->category ?? 'N/A' }}</td>
-                        <td>${{ number_format($medicine->unit_price, 2) }}</td>
+                        <td>{{ number_format($medicine->unit_price, 2) }}</td>
                         <td>{{ $medicine->quantity }}</td>
                         <td>{{ $medicine->supplier->supplier_name ?? $medicine->supplier ?? 'N/A' }}</td>
                         <td>{{ $medicine->expiry_date->format('d/m/Y') }}</td>
@@ -58,7 +58,7 @@
                             <form action="{{ route('medicines.destroy', $medicine->id) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm" 
+                                <button type="submit" class="btn btn-danger btn-sm"
                                         onclick="return confirm('Are you sure you want to delete {{ $medicine->name }}? This action cannot be undone!')">
                                     Delete
                                 </button>
@@ -101,7 +101,7 @@
                         </select>
                     </div>
 
-                    
+
                     <!-- Category -->
                     <div class="form-group">
                         <label for="category">Category*</label>
@@ -117,7 +117,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="unit_price">Unit Price (USD)*</label>
+                                <label for="unit_price">Unit Price (UGX)*</label>
                                 <input type="number" id="unit_price" name="unit_price" class="form-control" min="0" step="0.01" required>
                             </div>
                         </div>
@@ -168,16 +168,16 @@
 <script>
     // Set minimum date for expiry date (tomorrow)
     document.getElementById('expiry_date').min = new Date(new Date().getTime() + 86400000).toISOString().split('T')[0];
-    
+
     // Auto-calculate total when unit price or quantity changes
     document.getElementById('unit_price').addEventListener('input', calculateTotal);
     document.getElementById('quantity').addEventListener('input', calculateTotal);
-    
+
     function calculateTotal() {
         const unitPrice = parseFloat(document.getElementById('unit_price').value) || 0;
         const quantity = parseInt(document.getElementById('quantity').value) || 0;
         // This is just for display, the actual calculation happens in the controller
-        document.getElementById('total-display').textContent = '$' + (unitPrice * quantity).toFixed(2);
+        document.getElementById('total-display').textContent = 'UGX' + (unitPrice * quantity).toFixed(2);
     }
 </script>
 @endsection
