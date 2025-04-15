@@ -2,16 +2,15 @@
 
 namespace App\Models;
 
-use App\Models\AddMedicine;
-use App\Models\Supplier;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Stock extends Model
 {
     use HasFactory;
 
+    protected $table = 'stocks';
     protected $fillable = [
         'medicine',
         'supplier_id',
@@ -21,20 +20,34 @@ class Stock extends Model
         'purchase_date',
     ];
 
-    // In your Stock model (app/Models/Stock.php)
-protected $casts = [
-    'expiry_date' => 'date',
-    'purchase_date' => 'date',
-];
-    // Relationship to Supplier
+    protected $casts = [
+        'expiry_date' => 'date',
+        'purchase_date' => 'date',
+    ];
+
+    /**
+     * Get the supplier associated with the stock.
+     */
     public function supplier()
     {
         return $this->belongsTo(Supplier::class);
     }
 
-    public function medicine()
+    /**
+     * Calculate the expiry status based on the difference between current date and expiry date.
+     */
+    public function getExpiryStatusAttribute()
     {
-        return $this->belongsTo(AddMedicine::class, 'medicine_id');
+        $today = Carbon::today();
+        $expiryDate = Carbon::parse($this->expiry_date);
+        $monthsDifference = $today->diffInMonths($expiryDate, false);
+
+        if ($today > $expiryDate) {
+            return 'Expired';
+        } elseif ($monthsDifference <= 6) {
+            return 'Expiring Soon';
+        } else {
+            return 'Safe';
+        }
     }
-    
 }
