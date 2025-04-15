@@ -47,7 +47,7 @@
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $medicine->name }}</td>
                         <td>{{ $medicine->category->category ?? $medicine->category ?? 'N/A' }}</td>
-                        <td>${{ number_format($medicine->unit_price, 2) }}</td>
+                        <td>Ugx {{ number_format($medicine->unit_price, 2) }}</td>
                         <td>{{ $medicine->quantity }}</td>
                         <td>{{ $medicine->supplier->supplier_name ?? $medicine->supplier ?? 'N/A' }}</td>
                         <td>{{ $medicine->expiry_date->format('d/m/Y') }}</td>
@@ -117,7 +117,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="unit_price">Unit Price (USD)*</label>
+                                <label for="unit_price">Unit Price (UGX)*</label>
                                 <input type="number" id="unit_price" name="unit_price" class="form-control" min="0" step="0.01" required>
                             </div>
                         </div>
@@ -177,7 +177,7 @@
         const unitPrice = parseFloat(document.getElementById('unit_price').value) || 0;
         const quantity = parseInt(document.getElementById('quantity').value) || 0;
         // This is just for display, the actual calculation happens in the controller
-        document.getElementById('total-display').textContent = '$' + (unitPrice * quantity).toFixed(2);
+        document.getElementById('total-display').textContent = 'UGX' + (unitPrice * quantity).toFixed(2);
     }
 </script>
 @endsection
