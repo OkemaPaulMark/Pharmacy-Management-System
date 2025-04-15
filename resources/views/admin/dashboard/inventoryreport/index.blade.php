@@ -75,6 +75,10 @@
                     </tr>
                     </tfoot>
                 </table>
+                <!-- Pagination Controls -->
+                <div class="d-flex justify-content-between">
+                    {{ $medicines->links('pagination::bootstrap-4') }}
+                </div>
             </div>
         </div>
     </div>

@@ -82,3 +82,7 @@ Route::resource('salesreports', SalesreportController::class);
 Route::resource('expiryalerts', ExpiryalertsController::class);
 
 Route::resource('inventoryreports', InventoryreportController::class);
+
+Route::get('salesreport/pdf', [App\Http\Controllers\SalesreportController::class, 'generatePdf'])->name('salesreport.pdf');
+Route::get('inventoryreport/pdf', [App\Http\Controllers\InventoryreportController::class, 'generatePdf'])->name('inventoryreport.pdf');
+Route::get('expiryalerts/pdf', [App\Http\Controllers\ExpiryalertsController::class, 'generatePdf'])->name('expiryalerts.pdf');

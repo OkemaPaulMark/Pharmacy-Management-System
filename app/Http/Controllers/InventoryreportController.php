@@ -14,7 +14,7 @@ class InventoryreportController extends Controller
     public function index()
     {
         // Fetch all medicines with stock relationship
-        $medicines = AddMedicine::with('stock')->get();
+        $medicines = AddMedicine::with('stock')->paginate(10);;
 
         // Calculate total inventory value and items
         $totalValue = $medicines->sum('stock_value');
@@ -114,4 +114,6 @@ class InventoryreportController extends Controller
         // Redirect with success message
         return redirect()->route('inventoryreport.index')->with('success', 'Medicine deleted successfully.');
     }
+
+
 }
