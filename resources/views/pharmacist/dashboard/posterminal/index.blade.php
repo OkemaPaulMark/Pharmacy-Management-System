@@ -78,7 +78,7 @@
                         <select id="medicineSelect" class="form-control" required>
                             <option value="">Select Medicine</option>
                             @foreach($medicines as $medicine)
-                                <option value="{{ $medicine->id }}" 
+                                <option value="{{ $medicine->id }}"
                                         data-category="{{ $medicine->category_id }}"
                                         data-price="{{ $medicine->unit_price }}">
                                     {{ $medicine->name }} - ${{ number_format($medicine->unit_price, 2) }}
@@ -141,7 +141,7 @@
 <script>
 $(document).ready(function() {
     let cart = [];
-    
+
     // Filter medicines when category changes
     $('#categorySelect').change(function() {
         const categoryId = $(this).val();
@@ -152,13 +152,13 @@ $(document).ready(function() {
         $('#medicineSelect').val('');
         $('#price').val('');
     });
-    
+
     // Update price when medicine is selected
     $('#medicineSelect').change(function() {
         const price = $(this).find(':selected').data('price');
         $('#price').val(price);
     });
-    
+
     // Add to cart functionality
     $('#addToCartBtn').click(function() {
         const medicineId = $('#medicineSelect').val();
@@ -169,12 +169,12 @@ $(document).ready(function() {
         const price = $('#price').val();
         const prescription = $('#prescription').val();
         const total = (price * quantity).toFixed(2);
-        
+
         if (!medicineId || !categoryId || !quantity || !price) {
             alert('Please fill all required fields');
             return;
         }
-        
+
         cart.push({
             medicineId,
             medicineName,
@@ -185,28 +185,28 @@ $(document).ready(function() {
             total,
             prescription
         });
-        
+
         updateCartDisplay();
         $('#addMedicineModal').modal('hide');
         resetForm();
     });
-    
+
     // Checkout functionality
     $('#checkoutBtn').click(function() {
         if (cart.length === 0) {
             alert('Your cart is empty');
             return;
         }
-        
+
         generateInvoice();
         $('#checkoutModal').modal('show');
     });
-    
+
     // Print invoice
     $('#printInvoiceBtn').click(function() {
         window.print();
     });
-    
+
         // Save data to database
         $('#saveDataBtn').click(function() {
             $.ajax({
@@ -234,24 +234,24 @@ $(document).ready(function() {
             // Implement your PDF generation logic here
             // This could be a route that returns a PDF download
             window.location.href = '/generate-pdf?cart=' + JSON.stringify(cart);
-            
+
             // For now we'll just show a success message
             alert('Transactions saved to database and PDF downloaded!');
             $('#checkoutModal').modal('hide');
             cart = [];
             updateCartDisplay();
         }
-    
+
     function updateCartDisplay() {
         const $cartItems = $('#cartItems');
         const $grandTotal = $('#grandTotal');
         let grandTotal = 0;
-        
+
         $cartItems.empty();
-        
+
         cart.forEach((item, index) => {
             grandTotal += parseFloat(item.total);
-            
+
             $cartItems.append(`
                 <tr>
                     <td>${index + 1}</td>
@@ -269,9 +269,9 @@ $(document).ready(function() {
                 </tr>
             `);
         });
-        
+
         $grandTotal.text('$' + grandTotal.toFixed(2));
-        
+
         // Add event listener for remove buttons
         $('.remove-item').click(function() {
             const index = $(this).data('index');
@@ -279,12 +279,12 @@ $(document).ready(function() {
             updateCartDisplay();
         });
     }
-    
+
     function generateInvoice() {
         const invoiceDate = new Date().toLocaleString();
         let invoiceItems = '';
         let subtotal = 0;
-        
+
         cart.forEach(item => {
             subtotal += parseFloat(item.total);
             invoiceItems += `
@@ -296,10 +296,10 @@ $(document).ready(function() {
                 </tr>
             `;
         });
-        
+
         const tax = subtotal * 0.1; // 10% tax
         const total = subtotal + tax;
-        
+
         $('#invoiceContent').html(`
             <div class="invoice-header mb-4">
                 <h4>Pharmacy M.S</h4>
@@ -338,7 +338,7 @@ $(document).ready(function() {
             </div>
         `);
     }
-    
+
     function resetForm() {
         $('#medicineForm')[0].reset();
         $('#price').val('');
