@@ -33,6 +33,10 @@ class Stock extends Model
         return $this->belongsTo(Supplier::class);
     }
 
+    public function medicine()
+    {
+        return $this->belongsTo(AddMedicine::class,'medicine_id');
+    }
     /**
      * Calculate the expiry status based on the difference between current date and expiry date.
      */

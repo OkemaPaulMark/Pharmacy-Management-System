@@ -39,7 +39,7 @@
                         <td>{{ $stock->supplier->supplier_name }}</td>
                         <td>{{ $stock->quantity }}</td>
                         <td>{{ $stock->expiry_date->format('d/m/Y') }}</td>
-                        <td>${{ number_format($stock->unit_cost, 2) }}</td>
+                        <td>{{ number_format($stock->unit_cost, 2) }}</td>
                         <td>{{ $stock->purchase_date->format('d/m/Y') }}</td>
                         <td>
                             <a href="{{ route('stocks.show', $stock->id) }}" class="btn btn-info btn-sm">View</a>
