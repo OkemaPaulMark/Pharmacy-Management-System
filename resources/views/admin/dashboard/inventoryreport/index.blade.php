@@ -37,7 +37,7 @@
                             <td>{{ $medicine->name }}</td>
                             <!-- Supplier as string -->
                             <td>{{ $medicine->supplier ?? 'N/A' }}</td>
-                            <td>${{ number_format($medicine->unit_price, 2) }}</td>
+                            <td>{{ number_format($medicine->unit_price, 2) }}</td>
                             <td>
                                 {{ $medicine->quantity }}
                                 <!-- Status annotations -->
@@ -48,7 +48,7 @@
                                 @endif
                             </td>
                             <!-- Stock Value: unit_price * quantity -->
-                            <td>${{ number_format($medicine->stock_value, 2) }}</td>
+                            <td>{{ number_format($medicine->stock_value, 2) }}</td>
                             <td>{{ $medicine->expiry_date->format('Y-m-d') }}</td>
                             <td>
                                 <!-- Status badges -->
@@ -71,7 +71,7 @@
                     <tr class="bg-light">
                         <td colspan="4" class="text-right font-weight-bold">Total Inventory Value:</td>
                         <td>{{ $totalItems }} items</td>
-                        <td colspan="3">${{ number_format($totalValue, 2) }}</td>
+                        <td colspan="3">UGX{{ number_format($totalValue, 2) }}</td>
                     </tr>
                     </tfoot>
                 </table>
