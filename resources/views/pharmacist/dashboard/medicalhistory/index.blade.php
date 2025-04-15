@@ -41,14 +41,28 @@
                             <td>{{ $history->chronic_conditions }}</td>
                             <td>{{ $history->current_medications }}</td>
                             <td>
-                                <a href="#" class="btn btn-info btn-sm">View</a>
-                                <a href="#" class="btn btn-warning btn-sm">Edit</a>
-                                <a href="#" class="btn btn-danger btn-sm">Delete</a>
+                                <a href="{{ route('medicalhistories.show', $history->id) }}" class="btn btn-info btn-sm">View</a>
+                                <a href="{{ route('medicalhistories.edit', $history->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                
+                                <form action="{{ route('medicalhistories.destroy', $history->id) }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm" 
+                                        onclick="return confirm('Are you sure you want to delete {{ $history->patient->full_name }}\'s medical history? This action cannot be undone!')">
+                                        Delete
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
+
+            <!-- Pagination Links -->
+            <div class="d-flex justify-content-center">
+                {{ $histories->links('pagination::bootstrap-4') }}
+            </div>
+
         </div>
     </div>
 </div>
@@ -76,7 +90,6 @@
                             @endforeach
                         </select>
                     </div>
-
 
                     <div class="row">
                         <div class="col-md-6">

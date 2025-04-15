@@ -15,7 +15,7 @@ class MedicineController extends Controller
      */
     public function index()
     {
-        $medicines = AddMedicine::orderBy('created_at', 'desc')->get();
+        $medicines = AddMedicine::orderBy('created_at', 'desc')->paginate(3);
         $stocks = Stock::with('medicine')->get();
         $categories = Category::all();
         $suppliers = Supplier::all();
@@ -82,7 +82,17 @@ class MedicineController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $medicine = AddMedicine::findOrFail($id);
+        $stocks = Stock::with('medicine')->get();
+        $categories = Category::all();
+        $suppliers = Supplier::all();
+        
+        return view('admin.dashboard.medicine.edit', compact(
+            'medicine',
+            'stocks',
+            'categories',
+            'suppliers'
+        ));
     }
 
     /**
@@ -90,14 +100,48 @@ class MedicineController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
-    }
+        $validatedData = $request->validate([
+            'medicine_id' => 'required|exists:stocks,id',
+            'category' => 'required|exists:categories,id',
+            'unit_price' => 'required|numeric|min:0',
+            'quantity' => 'required|integer|min:1',
+            'supplier' => 'required|exists:suppliers,id',
+            'expiry_date' => 'required|date|after:today',
+            'description' => 'nullable|string',
+        ]);
 
+        $medicine = AddMedicine::findOrFail($id);
+        $stock = Stock::findOrFail($request->medicine_id);
+        $category = Category::findOrFail($request->category);
+        $supplier = Supplier::findOrFail($request->supplier);
+
+        $medicine->update([
+            'name' => $stock->medicine,
+            'category_id' => $category->id,
+            'category' => $category->category,
+            'unit_price' => $request->unit_price,
+            'quantity' => $request->quantity,
+            'supplier_id' => $supplier->id,
+            'supplier' => $supplier->supplier_name,
+            'expiry_date' => $request->expiry_date,
+            'description' => $request->description,
+            'medicine_id' => $request->medicine_id,
+        ]);
+
+        return redirect()->route('medicines.index')
+                         ->with('success', 'Medicine updated successfully!');
+    }
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
-        //
+        $medicine = AddMedicine::findOrFail($id);
+        $medicineName = $medicine->name;
+        
+        $medicine->delete();
+        
+        return redirect()->route('medicines.index')
+                         ->with('success', "Medicine '$medicineName' has been deleted successfully!");
     }
 }

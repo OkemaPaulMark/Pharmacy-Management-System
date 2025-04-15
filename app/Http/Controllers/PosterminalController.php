@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\AddMedicine;
 use App\Models\Category;
-use App\Models\PosTransaction;
+use App\Models\Posterminal;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class PosterminalController extends Controller
@@ -32,26 +33,33 @@ class PosterminalController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'medicine_id' => 'required|exists:medicines,id',
-            'category_id' => 'required|exists:categories,id',
-            'quantity' => 'required|integer|min:1',
-            'unit_price' => 'required|numeric|min:0',
-            'total' => 'required|numeric|min:0',
-            'prescription' => 'nullable|string',
+        // Validate incoming request
+        $request->validate([
+            'transactions' => 'required|array',
+            'transactions.*.medicineId' => 'required|integer|exists:add_medicines,id',
+            'transactions.*.categoryId' => 'required|integer|exists:categories,id',
+            'transactions.*.quantity' => 'required|integer|min:1',
+            'transactions.*.price' => 'required|numeric|min:0',
+            'transactions.*.total' => 'required|numeric|min:0',
+            'transactions.*.prescription' => 'nullable|string',
         ]);
 
-        $transaction = PosTerminal::create([
-            'medicine_id' => $request->medicine_id,
-            'category_id' => $request->category_id,
-            'quantity' => $request->quantity,
-            'unit_price' => $request->unit_price,
-            'total' => $request->total,
-            'prescription' => $request->prescription,
-            'user_id' => auth()->id(),
-        ]);
+        $transactions = $request->input('transactions');
 
-        return response()->json(['success' => true, 'transaction' => $transaction]);
+        // Store each transaction in the posterminals table
+        foreach ($transactions as $transaction) {
+            Posterminal::create([
+                'medicine_id' => $transaction['medicineId'],
+                'category_id' => $transaction['categoryId'],
+                'unit_price' => $transaction['price'],
+                'quantity' => $transaction['quantity'],
+                'total' => $transaction['total'],
+                'prescription' => $transaction['prescription'] ?? null,
+                'user_id' => Auth::id(),
+            ]);
+        }
+
+        return response()->json(['message' => 'Transaction data saved successfully'], 200);
     }
 
     /**

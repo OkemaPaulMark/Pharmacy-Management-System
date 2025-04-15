@@ -42,14 +42,28 @@
                         <td>${{ number_format($stock->unit_cost, 2) }}</td>
                         <td>{{ $stock->purchase_date->format('d/m/Y') }}</td>
                         <td>
-                            <a href="#" class="btn btn-info btn-sm">View</a>
-                            <a href="#" class="btn btn-warning btn-sm">Edit</a>
-                            <a href="#" class="btn btn-danger btn-sm">Delete</a>
+                            <a href="{{ route('stocks.show', $stock->id) }}" class="btn btn-info btn-sm">View</a>
+
+                            <a href="{{ route('stocks.edit', $stock->id) }}" class="btn btn-warning btn-sm">Edit</a>
+
+                            <form action="{{ route('stocks.destroy', $stock->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm"
+                                        onclick="return confirm('Are you sure you want to delete the stock {{ $stock->stock }}? This action cannot be undone!')">
+                                    Delete
+                                </button>
+                            </form>
                         </td>
+
                     </tr>
                     @endforeach
                 </tbody>
             </table>
+                            <!-- Pagination Controls -->
+                <div class="d-flex justify-content-between">
+                    {{ $stocks->links('pagination::bootstrap-4') }}
+                </div>
         </div>
     </div>
 </div>

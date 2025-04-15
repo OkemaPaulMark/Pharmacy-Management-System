@@ -13,7 +13,7 @@ class PatientController extends Controller
     public function index()
     {
         // Get all patients from the database
-        $patients = Patient::all();
+        $patients = Patient::paginate(3);
 
         // Return view with the patients data
         return view('pharmacist.dashboard.patient.index', compact('patients'));
@@ -70,24 +70,47 @@ class PatientController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $patient = Patient::findOrFail($id);
+        return view('pharmacist.dashboard.patient.edit', compact('patient'));
     }
-
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'full_name' => 'required|string|max:255',
+            'allergies' => 'nullable|string|max:255',
+        ]);
+    
+        $patient = Patient::findOrFail($id);
+        $patient->update($request->all());
+    
+        return redirect()->route('patients.index')->with('success', 'Patient updated successfully!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Patient $patient)
     {
-        //
+        try {
+            // Get the patient name before deletion for the success message
+            $patientName = $patient->full_name;
+            
+            // Delete the patient
+            $patient->delete();
+            
+            // Redirect with success message
+            return redirect()->route('patients.index')
+                            ->with('success', "Patient '$patientName' has been deleted successfully!");
+                            
+        } catch (\Exception $e) {
+            // Handle any errors that occur during deletion
+            return redirect()->route('patients.index')
+                            ->with('error', 'Error deleting patient: ' . $e->getMessage());
+        }
     }
 }

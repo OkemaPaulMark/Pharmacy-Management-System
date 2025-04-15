@@ -12,7 +12,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
+        $categories = Category::orderBy('created_at', 'desc')->paginate(1);
         return view('admin.dashboard.category.index', compact('categories'));
     }
     
@@ -57,24 +57,37 @@ public function store(Request $request)
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $category = Category::findOrFail($id);
+        return view('admin.dashboard.category.edit', compact('category'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $validated = $request->validate([
+            'category' => 'required|string|max:255',
+            'description' => 'required|string|max:1000',
+        ]);
+
+        $category = Category::findOrFail($id);
+        $category->update($validated);
+
+        return redirect()->route('categories.index')->with('success', 'Category updated successfully!');
     }
+
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $category = Category::findOrFail($id);
+        $category->delete();
+
+        return redirect()->route('categories.index')->with('success', 'Category deleted successfully!');
     }
 }

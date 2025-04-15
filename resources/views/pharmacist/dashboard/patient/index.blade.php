@@ -71,18 +71,26 @@
                         <td>{{ $patient->caretaker }}</td>
                         <td>{{ $patient->caretaker_phone }}</td>
                         <td>
-                            <a href="{{ route('patients.show', $patient->id) }}" class="btn btn-info btn-sm">View</a>
-                            <a href="{{ route('patients.edit', $patient->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                            <form action="{{ route('patients.destroy', $patient->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                            </form>
-                        </td>
+                        <a href="{{ route('patients.show', $patient->id) }}" class="btn btn-info btn-sm">View</a>
+                        <a href="{{ route('patients.edit', $patient->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <form action="{{ route('patients.destroy', $patient->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm" 
+                                    onclick="return confirm('Are you sure you want to delete {{ $patient->full_name }}? This action cannot be undone!')">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
+
+                <!-- Pagination Controls -->
+            <div class="d-flex justify-content-between">
+            {{ $patients->links('pagination::bootstrap-4') }}
+            </div>
         </div>
     </div>
 </div>

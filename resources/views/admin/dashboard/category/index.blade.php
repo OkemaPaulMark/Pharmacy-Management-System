@@ -34,14 +34,29 @@
                         <td>{{ $category->category }}</td>
                         <td>{{ $category->description }}</td>
                         <td>
-                            <a href="#" class="btn btn-info btn-sm">View</a>
-                            <a href="#" class="btn btn-warning btn-sm">Edit</a>
-                            <a href="#" class="btn btn-danger btn-sm">Delete</a>
+                            <a href="{{ route('categories.show', $category->id) }}" class="btn btn-info btn-sm">View</a>
+
+                            <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-warning btn-sm">Edit</a>
+
+                            <form action="{{ route('categories.destroy', $category->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm"
+                                        onclick="return confirm('Are you sure you want to delete {{ $category->category }}? This action cannot be undone!')">
+                                    Delete
+                                </button>
+                            </form>
                         </td>
+
                     </tr>
                 @endforeach
             </tbody>
         </table>
+
+                        <!-- Pagination Controls -->
+                        <div class="d-flex justify-content-between">
+                        {{ $categories->links('pagination::bootstrap-4') }}
+                        </div>
         </div>
     </div>
 </div>

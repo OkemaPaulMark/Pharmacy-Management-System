@@ -14,7 +14,7 @@ class StockController extends Controller
      */
     public function index()
     {
-        $stocks = Stock::with('supplier')->get();
+        $stocks = Stock::with('supplier')->orderBy('created_at', 'desc')->paginate(2);
         $suppliers = Supplier::all();
 
         return view('admin.dashboard.stock.index', compact('stocks', 'suppliers'));
@@ -75,17 +75,31 @@ public function create()
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $stock = Stock::findOrFail($id);
+        $suppliers = Supplier::all();
+        return view('admin.dashboard.stock.edit', compact('stock', 'suppliers'));
     }
+    
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validated = $request->validate([
+            'product_name' => 'required|string|max:255',
+            'quantity' => 'required|integer|min:1',
+            'price' => 'required|numeric',
+            'supplier_id' => 'required|exists:suppliers,id',
+            'description' => 'nullable|string',
+        ]);
+
+        $stock = Stock::findOrFail($id);
+        $stock->update($validated);
+
+        return redirect()->route('stocks.index')->with('success', 'Stock updated successfully');
     }
 
     /**
@@ -93,6 +107,9 @@ public function create()
      */
     public function destroy(string $id)
     {
-        //
+        $stock = Stock::findOrFail($id);
+        $stock->delete();
+
+        return redirect()->route('stocks.index')->with('success', 'Stock deleted successfully');
     }
 }
