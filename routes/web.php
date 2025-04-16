@@ -29,21 +29,19 @@ Route::get('/', function () {
 
 // Admin Dashboard (protected by auth middleware)
 Route::middleware(['auth', 'verified'])->group(function () {
-    // Admin Dashboard
-    Route::get('/dashboard', function () {
-        if (auth()->user()->role !== 'admin') {
-            abort(403, 'Unauthorized');
-        }
-        return view('admin.dashboard.list');
-    })->name('dashboard');
-
+    // Admin Dashboard - Use the controller method that passes chart data
+    Route::get('/dashboard', [DashboardController::class, 'dashboard'])
+        ->name('dashboard');
+    
     // Pharmacist Dashboard
-    Route::get('/pharmacist/dashboard', function () {
-        if (auth()->user()->role !== 'pharmacist') {
-            abort(403, 'Unauthorized');
-        }
-        return view('pharmacist.dashboard.list');
-    })->name('pharmacist.dashboard');
+Route::get('/pharmacist/dashboard', function () {
+    if (auth()->user()->role !== 'pharmacist') {
+        abort(403, 'Unauthorized');
+    }
+    // Call the controller method manually
+    return app()->call('App\Http\Controllers\DashboardController@index');
+})->middleware(['auth', 'verified'])->name('pharmacist.dashboard');
+
 });
 
 Route::middleware('auth')->group(function () {
