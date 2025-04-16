@@ -24,7 +24,7 @@ class DashboardController extends Controller
             $lowStockItems = AddMedicine::whereBetween('quantity', [50, 99])->count();
 
             // Expiring Soon: Count stocks expiring between today and May 16, 2025
-            $expiringSoon = Stock::where('expiry_date', '<=', Carbon::today()->addDays(30))
+            $expiringSoon = Stock::where('expiry_date', '<=', Carbon::today()->addDays(180))
                 ->where('expiry_date', '>=', Carbon::today())
                 ->count();
 
@@ -67,7 +67,7 @@ class DashboardController extends Controller
             $lowStockItems = AddMedicine::whereBetween('quantity', [50, 99])->count();
 
             // Expiring Soon: Count stocks expiring between today and May 16, 2025
-            $expiringSoon = Stock::where('expiry_date', '<=', Carbon::today()->addDays(30))
+            $expiringSoon = Stock::where('expiry_date', '<=', Carbon::today()->addDays(180))
                 ->where('expiry_date', '>=', Carbon::today())
                 ->count();
 
