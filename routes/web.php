@@ -47,10 +47,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/save-pos-data', [PosterminalController::class, 'store'])->name('posterminal.store');
     Route::get('/saleshistory', [SaleshistoryController::class, 'index'])->name('sales.history');
 
-    // PDF Generation Routes
-    Route::get('/salesreports/pdf', [SalesreportController::class, 'generatePdf'])->name('salesreports.pdf');
-    Route::get('/inventoryreports/pdf', [InventoryreportController::class, 'generatePdf'])->name('inventoryreports.pdf');
-    Route::get('/expiryalerts/pdf', [ExpiryalertsController::class, 'generatePdf'])->name('expiryalerts.pdf');
 });
 
 // Authentication Routes
