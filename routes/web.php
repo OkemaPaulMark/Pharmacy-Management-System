@@ -31,7 +31,7 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     // Admin Dashboard - Use the controller method that passes chart data
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])
-        ->name('dashboard');
+        ->name('admin.dashboard');
     
     // Pharmacist Dashboard
 Route::get('/pharmacist/dashboard', function () {
