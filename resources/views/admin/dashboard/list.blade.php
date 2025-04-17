@@ -155,13 +155,13 @@
 
     <!-- Line Chart Row -->
     <div class="row">
-        <div class="col-xl-12 col-lg-12 mt-5">
-            <div class="card shadow mb-4">
+        <div class="col-xl-6 col-lg-6 mt-5">
+            <div class="card shadow mb-4 mx-auto" style="margin-top: 20px;">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <h6 class="m-0 font-weight-bold text-primary">Stock Expiry Timeline</h6>
                 </div>
                 <div class="card-body">
-                    <div class="chart-area mt-5" style="width: 100%; min-width: 850px;">
+                    <div class="chart-area" style="height: 400px;">
                         <canvas id="lineChart"></canvas>
                     </div>
                 </div>

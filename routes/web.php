@@ -31,7 +31,7 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     // Admin Dashboard - Use the controller method that passes chart data
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])
-        ->name('dashboard');
+        ->name('admin.dashboard');
 
     // Pharmacist Dashboard
 Route::get('/pharmacist/dashboard', function () {
@@ -86,5 +86,5 @@ Route::get('inventoryreport/pdf', [App\Http\Controllers\InventoryreportControlle
 Route::get('expiryalerts/pdf', [App\Http\Controllers\ExpiryalertsController::class, 'generatePdf'])->name('expiryalerts.pdf');
 
 //New
-Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'dashboard'])->name('dashboard');
+Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'dashboard'])->name('admin.dashboard');
 Route::get('/pharmacist/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('pharmacist.dashboard');
