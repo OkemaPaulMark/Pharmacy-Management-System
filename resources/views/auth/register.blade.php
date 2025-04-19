@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Pharmacy MS - Register</title>
+    <title>FirstLink Pharmacy - Register</title>
     
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -126,7 +126,8 @@
                         <div class="col-lg-6 d-none d-lg-block login-left">
                             <div class="text-center">
                                 <i class="fas fa-pills fa-3x mb-3"></i>
-                                <h2>Pharmacy Management System</h2>
+                                <h2>FirstLink Pharmacy</h2>
+                                <p>"Your Health Is Our Business"</p>
                                 <p>Secure access to your pharmacy's management dashboard</p>
                             </div>
                         </div>
@@ -184,8 +185,8 @@
                             </form>
                             
                             <div class="footer">
-                                <p class="mb-0">© {{ date('Y') }} Pharmacy MS. All rights reserved.</p>
-                                <p class="mb-0">Designed by <a href="#" class="text-primary">Kalulu Technologies</a></p>
+                                <p class="mb-0">© {{ date('Y') }} FirstLink Pharmacy. All rights reserved.</p>
+                                <!-- <p class="mb-0">Designed by <a href="#" class="text-primary">Kalulu Technologies</a></p> -->
                             </div>
                         </div>
                     </div>
