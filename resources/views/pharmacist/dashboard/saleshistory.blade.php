@@ -6,9 +6,10 @@
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 text-gray-800">Sales History</h1>
-        <a href="#" class="btn btn-sm btn-primary shadow-sm">
+        <a href="{{ route('saleshistory.generatePDF') }}" class="btn btn-sm btn-primary shadow-sm">
             <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
         </a>
+
     </div>
 
     <div class="card shadow mb-4">

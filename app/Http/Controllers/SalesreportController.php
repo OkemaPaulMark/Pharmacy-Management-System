@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Posterminal;
 use App\Models\Medicine;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class SalesreportController extends Controller
 {
@@ -15,8 +17,9 @@ class SalesreportController extends Controller
     {
         // Fetch all transactions with related medicine
         $transactions = Posterminal::with('medicine')
-            ->orderBy('created_at', 'desc')
-            ->get();
+        ->orderBy('created_at', 'desc')
+        ->paginate(10); // or any number of items per page
+    
 
         // Calculate total sales
         $totalSales = $transactions->sum('total');
@@ -118,6 +121,23 @@ class SalesreportController extends Controller
         // Redirect to index with success message
         return redirect()->route('salesreport.index')->with('success', 'Transaction deleted successfully.');
     }
+
+    public function generatePDF()
+    {
+        $transactions = Posterminal::with('medicine')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $totalSales = $transactions->sum('total');
+
+        $pdf = Pdf::loadView('admin.dashboard.salesreport.pdf', [
+            'transactions' => $transactions,
+            'totalSales' => $totalSales
+        ]);
+
+        return $pdf->download('sales-report.pdf');
+    }
+
 
 
 }

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Posterminal; // Make sure to import your Posterminal model
+use App\Models\Posterminal; 
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class SaleshistoryController extends Controller
 {
@@ -21,5 +23,22 @@ class SaleshistoryController extends Controller
             'transactions' => $transactions,
             'totalSales' => $totalSales
         ]);
+    }
+    
+    public function generatePDF()
+    {
+        $transactions = Posterminal::with(['medicine.category'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $totalSales = $transactions->sum('total');
+
+        // Load a view and pass data to it
+        $pdf = Pdf::loadView('pharmacist.dashboard.saleshistory_pdf', [
+            'transactions' => $transactions,
+            'totalSales' => $totalSales
+        ]);
+
+        return $pdf->download('sales-history.pdf');
     }
 }

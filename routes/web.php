@@ -15,6 +15,7 @@ use App\Http\Controllers\InventoryreportController;
 use App\Http\Controllers\ExpiryalertsController;
 use App\Http\Controllers\SaleshistoryController;
 
+
 // Public Route
 Route::get('/', function () {
     return view('auth.login');
@@ -51,6 +52,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('salesreport/pdf', [SalesreportController::class, 'generatePdf'])->name('salesreport.pdf');
     Route::get('inventoryreport/pdf', [InventoryreportController::class, 'generatePdf'])->name('inventoryreport.pdf');
     Route::get('expiryalerts/pdf', [ExpiryalertsController::class, 'generatePdf'])->name('expiryalerts.pdf');
+
+
+    Route::get('/saleshistory', [SaleshistoryController::class, 'index'])->name('saleshistory.index');
+    Route::get('/saleshistory/pdf', [SaleshistoryController::class, 'generatePDF'])->name('saleshistory.generatePDF');
+
+    Route::get('/salesreport/pdf', [SalesreportController::class, 'generatePDF'])->name('salesreport.generatePDF');
+
+
 });
 
 // Authentication Routes

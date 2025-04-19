@@ -6,7 +6,7 @@
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 text-gray-800">Sales Report</h1>
-        <a href="#" class="btn btn-sm btn-primary shadow-sm">
+        <a href="{{ route('salesreport.generatePDF') }}" class="btn btn-sm btn-primary shadow-sm">
             <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
         </a>
     </div>
@@ -43,8 +43,7 @@
                     <tbody>
                     @forelse ($transactions as $index => $transaction)
                         <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <!-- Fetch medicine name dynamically -->
+                            <td>{{ $loop->iteration + ($transactions->currentPage() - 1) * $transactions->perPage() }}</td>
                             <td>{{ $transaction->medicine->name ?? 'N/A' }}</td>
                             <td>{{ number_format($transaction->unit_price, 2) }}</td>
                             <td>{{ $transaction->quantity }}</td>
@@ -53,11 +52,11 @@
                         </tr>
                     @empty
                         <tr>
-                            <!-- Adjusted colspan to 6 -->
                             <td colspan="6" class="text-center">No sales history available.</td>
                         </tr>
                     @endforelse
                     </tbody>
+
                     <tfoot>
                     <tr>
                         <!-- Adjusted colspan and added dynamic total sales -->
@@ -66,23 +65,13 @@
                     </tr>
                     </tfoot>
                 </table>
+
+                <div class="mt-3">
+                    {{ $transactions->links('pagination::bootstrap-4') }}
+                </div>
+
             </div>
         </div>
     </div>
 @endsection
 
-@push('scripts')
-    <!-- Added DataTables plugins to match saleshistory -->
-    <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
-
-    <!-- Added DataTables initialization script -->
-    <script>
-        $(document).ready(function() {
-            $('#salesTable').DataTable({
-                "order": [[5, "desc"]], // Sort by date descending
-                "pageLength": 25
-            });
-        });
-    </script>
-@endpush
