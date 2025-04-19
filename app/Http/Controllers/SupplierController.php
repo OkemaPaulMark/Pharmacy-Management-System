@@ -59,7 +59,9 @@ class SupplierController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $supplier = Supplier::with(['stocks', 'medicines'])->findOrFail($id);
+    
+    return view('admin.dashboard.supplier.show', compact('supplier'));
     }
 
     /**

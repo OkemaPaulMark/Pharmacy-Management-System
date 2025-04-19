@@ -64,7 +64,9 @@ class PatientController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $patient = Patient::findOrFail($id);
+    
+    return view('pharmacist.dashboard.patient.show', compact('patient'));
     }
 
     /**

@@ -86,5 +86,5 @@ Route::get('inventoryreport/pdf', [App\Http\Controllers\InventoryreportControlle
 Route::get('expiryalerts/pdf', [App\Http\Controllers\ExpiryalertsController::class, 'generatePdf'])->name('expiryalerts.pdf');
 
 //New
-Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'dashboard'])->name('admin.dashboard');
+Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'dashboard'])->name('dashboard');
 Route::get('/pharmacist/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('pharmacist.dashboard');
