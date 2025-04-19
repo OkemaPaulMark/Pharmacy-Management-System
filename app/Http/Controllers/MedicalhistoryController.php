@@ -64,7 +64,8 @@ class MedicalhistoryController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $history = PatientHistory::with('patient')->findOrFail($id);
+    return view('pharmacist.dashboard.medicalhistory.show', compact('history'));
     }
 
     /**

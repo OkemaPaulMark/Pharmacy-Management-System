@@ -74,7 +74,10 @@ class MedicineController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $medicine = AddMedicine::with(['category', 'supplier', 'stock'])
+                  ->findOrFail($id);
+    
+    return view('admin.dashboard.medicine.show', compact('medicine'));
     }
 
     /**

@@ -51,7 +51,11 @@ public function store(Request $request)
      */
     public function show(string $id)
     {
-        //
+        $category = Category::with(['medicines' => function($query) {
+            $query->orderBy('created_at', 'desc')->take(5);
+        }])->findOrFail($id);
+        
+        return view('admin.dashboard.category.show', compact('category'));
     }
 
     /**

@@ -15,23 +15,23 @@ use App\Http\Controllers\InventoryreportController;
 use App\Http\Controllers\ExpiryalertsController;
 use App\Http\Controllers\SaleshistoryController;
 
-// Public Routes
+// Public Route
 Route::get('/', function () {
     return view('auth.login');
 });
 
 // Authenticated Routes
 Route::middleware(['auth', 'verified'])->group(function () {
-    // Dashboard Routes
+    // Dashboards
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/pharmacist/dashboard', [DashboardController::class, 'index'])->name('pharmacist.dashboard');
 
-    // Profile Routes
+    // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Resource Routes
+    // Resource Controllers
     Route::resource('posterminal', PosterminalController::class);
     Route::resource('medicines', MedicineController::class);
     Route::resource('categories', CategoryController::class);
@@ -47,6 +47,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/save-pos-data', [PosterminalController::class, 'store'])->name('posterminal.store');
     Route::get('/saleshistory', [SaleshistoryController::class, 'index'])->name('sales.history');
 
+    // PDF Reports
+    Route::get('salesreport/pdf', [SalesreportController::class, 'generatePdf'])->name('salesreport.pdf');
+    Route::get('inventoryreport/pdf', [InventoryreportController::class, 'generatePdf'])->name('inventoryreport.pdf');
+    Route::get('expiryalerts/pdf', [ExpiryalertsController::class, 'generatePdf'])->name('expiryalerts.pdf');
 });
 
 // Authentication Routes

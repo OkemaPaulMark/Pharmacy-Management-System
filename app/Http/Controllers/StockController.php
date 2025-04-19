@@ -69,7 +69,9 @@ public function create()
      */
     public function show(string $id)
     {
-        //
+        $stock = Stock::with(['supplier'])->findOrFail($id);
+    
+        return view('admin.dashboard.stock.show', compact('stock'));
     }
 
     /**
