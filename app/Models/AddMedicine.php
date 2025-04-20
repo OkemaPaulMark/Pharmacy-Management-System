@@ -13,13 +13,16 @@ class AddMedicine extends Model
     protected $fillable = [
         'name',
         'category_id',
+        'category',
         'unit_price',
         'quantity',
         'supplier_id',
+        'supplier',
         'expiry_date',
         'description',
-        'stock_id', // assuming you meant this instead of medicine_id
+        'medicine_id',
     ];
+    
     
 
     protected $casts = [
