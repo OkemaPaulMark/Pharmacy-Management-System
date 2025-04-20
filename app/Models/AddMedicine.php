@@ -62,6 +62,12 @@ class AddMedicine extends Model
         return $this->unit_price * $this->quantity;
     }
 
+    // Add this to your AddMedicine model
+    public function scopeLowStock($query)
+    {
+        return $query->where('quantity', '<', 10); // Adjust threshold as needed
+    }
+
     /**
      * Determine the stock status based on quantity:
      * - Critical Stock: quantity < 50

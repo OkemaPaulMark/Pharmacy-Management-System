@@ -217,7 +217,12 @@ $(document).ready(function() {
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(response) {
-                    alert(response.message); // Show success message
+                    alert(response.message);
+                    if (response.remaining_quantities) {
+                        // Update your UI with remaining quantities if needed
+                        // You could add logic here to update stock displays
+                        console.log('Remaining quantities:', response.remaining_quantities);
+                    }
                     $('#checkoutModal').modal('hide');
                     cart = []; // Clear cart
                     updateCartDisplay(); // Update cart display
@@ -228,7 +233,6 @@ $(document).ready(function() {
                 }
             });
         });
-
 
         function downloadPdf() {
             // Implement your PDF generation logic here

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AddMedicine;
 use App\Models\Category;
 use App\Models\Posterminal;
+use App\Models\Stock; 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -43,23 +44,55 @@ class PosterminalController extends Controller
             'transactions.*.total' => 'required|numeric|min:0',
             'transactions.*.prescription' => 'nullable|string',
         ]);
-
+    
         $transactions = $request->input('transactions');
-
-        // Store each transaction in the posterminals table
-        foreach ($transactions as $transaction) {
-            Posterminal::create([
-                'medicine_id' => $transaction['medicineId'],
-                'category_id' => $transaction['categoryId'],
-                'unit_price' => $transaction['price'],
-                'quantity' => $transaction['quantity'],
-                'total' => $transaction['total'],
-                'prescription' => $transaction['prescription'] ?? null,
-                'user_id' => Auth::id(),
-            ]);
+    
+        // Use database transaction to ensure data consistency
+        \DB::beginTransaction();
+        
+        try {
+            foreach ($transactions as $transaction) {
+                // 1. Get the medicine record
+                $medicine = AddMedicine::findOrFail($transaction['medicineId']);
+                
+                // 2. Check if sufficient quantity exists
+                if ($medicine->quantity < $transaction['quantity']) {
+                    throw new \Exception("Insufficient quantity for {$medicine->name}. Available: {$medicine->quantity}");
+                }
+                
+                // 3. Reduce the quantity in add_medicines table
+                $medicine->decrement('quantity', $transaction['quantity']);
+                
+                // 4. Reduce the quantity in stocks table (if medicine_id is the same)
+                Stock::where('id', $medicine->medicine_id)
+                    ->decrement('quantity', $transaction['quantity']);
+                
+                // 5. Create the POS transaction record
+                Posterminal::create([
+                    'medicine_id' => $transaction['medicineId'],
+                    'category_id' => $transaction['categoryId'],
+                    'unit_price' => $transaction['price'],
+                    'quantity' => $transaction['quantity'],
+                    'total' => $transaction['total'],
+                    'prescription' => $transaction['prescription'] ?? null,
+                    'user_id' => Auth::id(),
+                ]);
+            }
+            
+            \DB::commit();
+            
+            return response()->json([
+                'message' => 'Transaction completed successfully',
+                'remaining_quantities' => AddMedicine::whereIn('id', 
+                    collect($transactions)->pluck('medicineId'))->pluck('quantity', 'id')
+            ], 200);
+            
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            return response()->json([
+                'message' => 'Transaction failed: ' . $e->getMessage()
+            ], 400);
         }
-
-        return response()->json(['message' => 'Transaction data saved successfully'], 200);
     }
 
     /**
