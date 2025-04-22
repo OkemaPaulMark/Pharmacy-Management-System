@@ -15,8 +15,8 @@ class DashboardController extends Controller
      */
     public function dashboard(Request $request)
     {
-        // Today's Sales
-        $todaySales = Posterminal::whereDate('created_at', Carbon::today())->count();
+        // Today's Sales (Sum of unit_price)
+        $todaySales = Posterminal::whereDate('created_at', Carbon::today())->sum('unit_price');
 
         // Low-Stock Items
         $lowStockItems = AddMedicine::whereBetween('quantity', [50, 99])->count();
@@ -48,8 +48,8 @@ class DashboardController extends Controller
      */
     public function index(Request $request)
     {
-        // Today's Sales
-        $todaySales = Posterminal::whereDate('created_at', Carbon::today())->count();
+        // Today's Sales (Sum of unit_price)
+        $todaySales = Posterminal::whereDate('created_at', Carbon::today())->sum('unit_price');
 
         // Low-Stock Items
         $lowStockItems = AddMedicine::whereBetween('quantity', [50, 99])->count();
