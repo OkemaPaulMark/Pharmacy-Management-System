@@ -36,36 +36,39 @@ class MedicineController extends Controller
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        $request->validate([
             'medicine_id' => 'required|exists:stocks,id',
-            'category' => 'required|exists:categories,id', // Validate category ID exists
+            'category' => 'required|exists:categories,id', // This matches form field name
             'unit_price' => 'required|numeric|min:0',
             'quantity' => 'required|integer|min:1',
-            'supplier' => 'required|exists:suppliers,id',
+            'supplier' => 'required|exists:suppliers,id', // This matches form field name
             'expiry_date' => 'required|date|after:today',
             'description' => 'nullable|string',
         ]);
-
+    
+        // Get related models
         $stock = Stock::findOrFail($request->medicine_id);
-        $category = Category::findOrFail($request->category);
-        $supplier = Supplier::findOrFail($request->supplier);
-
+        $category = Category::findOrFail($request->category); // Using 'category' from form
+        $supplier = Supplier::findOrFail($request->supplier); // Using 'supplier' from form
+    
+        // Create the medicine
         AddMedicine::create([
             'name' => $stock->medicine,
-            'category_id' => $category->id, // Store the category ID
-            'category' => $category->category, // Also store the category name
+            'category_id' => $category->id,
+            'category' => $category->category, // Store the category name
             'unit_price' => $request->unit_price,
             'quantity' => $request->quantity,
-            'supplier_id' => $supplier->id, // Store the supplier ID
-            'supplier' => $supplier->supplier_name, // Also store the supplier name
+            'supplier_id' => $supplier->id,
+            'supplier' => $supplier->supplier_name, // Store the supplier name
             'expiry_date' => $request->expiry_date,
             'description' => $request->description,
             'medicine_id' => $request->medicine_id,
         ]);
-
+    
         return redirect()->route('medicines.index')
                          ->with('success', 'Medicine added successfully!');
     }
+    
 
 
 
