@@ -112,5 +112,4 @@ class ExpiryalertsController extends Controller
         // Redirect to index with success message
         return redirect()->route('expiryalerts.index')->with('success', 'Stock deleted successfully.');
     }
-w
 }
