@@ -1,121 +1,143 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Posterminal;
-use App\Models\AddMedicine;
-use App\Models\Stock;
-use App\Models\Supplier;
-use Carbon\Carbon;
+use App\Models\Medicine;
+use Barryvdh\DomPDF\Facade\Pdf;
 
-class DashboardController extends Controller
+
+class SalesreportController extends Controller
 {
     /**
-     * Display the admin dashboard with key metrics and charts.
+     * Display a listing of the resource.
      */
-    public function dashboard(Request $request)
+    public function index()
     {
-        // Today's Sales (Sum of totalSales)
-        $todaySales = Posterminal::whereDate('created_at', Carbon::today())->sum('totalSales');
+        // Fetch all transactions with related medicine
+        $transactions = Posterminal::with('medicine')
+        ->orderBy('created_at', 'desc')
+        ->paginate(10); // or any number of items per page
+    
 
-        // Low-Stock Items
-        $lowStockItems = AddMedicine::whereBetween('quantity', [50, 99])->count();
+        // Calculate total sales
+        $totalSales = $transactions->sum('total');
 
-        // Expiring Soon
-        $expiringSoon = Stock::where('expiry_date', '<=', Carbon::today()->addDays(180))
-            ->where('expiry_date', '>=', Carbon::today())
-            ->count();
-
-        // Total Stocks
-        $totalStocks = Stock::count();
-
-        // Chart Data
-        $stocks = Stock::with('supplier')->get();
-
-        // Prepare chart data
-        $chartData = $this->prepareChartData($stocks);
-
-        return view('admin.dashboard.list', array_merge([
-            'todaySales' => $todaySales,
-            'lowStockItems' => $lowStockItems,
-            'expiringSoon' => $expiringSoon,
-            'totalStocks' => $totalStocks
-        ], $chartData));
+        // Return the sales report index view with transactions and total sales
+        return view('admin.dashboard.salesreport.index', [
+            'transactions' => $transactions,
+            'totalSales' => $totalSales
+        ]);
     }
 
     /**
-     * Display the pharmacist dashboard with key metrics and charts.
+     * Show the form for creating a new resource.
      */
-    public function index(Request $request)
+    public function create()
     {
-        // Today's Sales (Sum of totalSales)
-        $todaySales = Posterminal::whereDate('created_at', Carbon::today())->sum('totalSales');
-
-        // Low-Stock Items
-        $lowStockItems = AddMedicine::whereBetween('quantity', [50, 99])->count();
-
-        // Expiring Soon
-        $expiringSoon = Stock::where('expiry_date', '<=', Carbon::today()->addDays(180))
-            ->where('expiry_date', '>=', Carbon::today())
-            ->count();
-
-        // Total Stocks
-        $totalStocks = Stock::count();
-
-        // Chart Data
-        $stocks = Stock::with('supplier')->get();
-
-        // Prepare chart data
-        $chartData = $this->prepareChartData($stocks);
-
-        return view('pharmacist.dashboard.list', array_merge([
-            'todaySales' => $todaySales,
-            'lowStockItems' => $lowStockItems,
-            'expiringSoon' => $expiringSoon,
-            'totalStocks' => $totalStocks
-        ], $chartData));
+        // Fetch all medicines for dropdown
+        $medicines = Medicine::all();
+        return view('admin.dashboard.salesreport.create', compact('medicines'));
     }
 
     /**
-     * Prepare chart data from stocks collection
+     * Store a newly created resource in storage.
      */
-    private function prepareChartData($stocks)
+    public function store(Request $request)
     {
-        // Bar Chart: Medicine Quantities
-        $barLabels = $stocks->pluck('medicine')->toArray();
-        $barData = $stocks->pluck('quantity')->toArray();
+        // Validate the incoming request data
+        $validated = $request->validate([
+            'medicine_id' => 'required|exists:medicines,id',
+            'unit_price' => 'required|numeric|min:0',
+            'quantity' => 'required|integer|min:1',
+            'created_at' => 'required|date',
+        ]);
 
-        // Pie Chart: Stock by Supplier
-        $pieData = $stocks->groupBy('supplier_id')->map(function ($items) {
-            return $items->sum('quantity');
-        });
-        $pieLabels = Supplier::whereIn('id', $pieData->keys())->pluck('supplier_name')->toArray();
-        $pieData = $pieData->values()->toArray();
+        // Calculate total
+        $validated['total'] = $validated['unit_price'] * $validated['quantity'];
 
-        // Line Chart: Stock Expiry Timeline
-        $lineData = $stocks->groupBy('expiry_date')->map(function ($items) {
-            return $items->sum('quantity');
-        });
-        $lineLabels = $lineData->keys()->map(function ($date) {
-            return Carbon::parse($date)->format('Y-m-d');
-        })->toArray();
-        $lineData = $lineData->values()->toArray();
+        // Create a new transaction
+        Posterminal::create($validated);
 
-        return [
-            'barLabels' => $barLabels,
-            'barData' => $barData,
-            'pieLabels' => $pieLabels,
-            'pieData' => $pieData,
-            'lineLabels' => $lineLabels,
-            'lineData' => $lineData
-        ];
+        // Redirect to index with success message
+        return redirect()->route('salesreport.index')->with('success', 'Transaction added successfully.');
     }
 
     /**
-     * Display the sales history page.
+     * Display the specified resource.
      */
-    public function saleshistory(Request $request)
+    public function show(string $id)
     {
-        return view('pharmacist.dashboard.saleshistory');
+        // Fetch the transaction with its medicine
+        $transaction = Posterminal::with('medicine')->findOrFail($id);
+        return view('admin.dashboard.salesreport.show', compact('transaction'));
     }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        // Fetch the transaction and medicines
+        $transaction = Posterminal::findOrFail($id);
+        $medicines = Medicine::all();
+        return view('admin.dashboard.salesreport.edit', compact('transaction', 'medicines'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        // Validate the incoming request data
+        $validated = $request->validate([
+            'medicine_id' => 'required|exists:medicines,id',
+            'unit_price' => 'required|numeric|min:0',
+            'quantity' => 'required|integer|min:1',
+            'created_at' => 'required|date',
+        ]);
+
+        // Calculate total
+        $validated['total'] = $validated['unit_price'] * $validated['quantity'];
+
+        // Update the transaction
+        $transaction = Posterminal::findOrFail($id);
+        $transaction->update($validated);
+
+        // Redirect to index with success message
+        return redirect()->route('salesreport.index')->with('success', 'Transaction updated successfully.');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        // Delete the transaction
+        $transaction = Posterminal::findOrFail($id);
+        $transaction->delete();
+
+        // Redirect to index with success message
+        return redirect()->route('salesreport.index')->with('success', 'Transaction deleted successfully.');
+    }
+
+    public function generatePDF()
+    {
+        $transactions = Posterminal::with('medicine')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $totalSales = $transactions->sum('total');
+
+        $pdf = Pdf::loadView('admin.dashboard.salesreport.pdf', [
+            'transactions' => $transactions,
+            'totalSales' => $totalSales
+        ]);
+
+        return $pdf->download('sales-report.pdf');
+    }
+
+
+
 }
