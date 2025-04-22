@@ -8,7 +8,7 @@ use App\Models\Stock;
 use App\Models\Supplier;
 use Carbon\Carbon;
 
-class DashboardController extends Controller
+class SalesreportController extends Controller
 {
     /**
      * Display the admin dashboard with key metrics and charts.
