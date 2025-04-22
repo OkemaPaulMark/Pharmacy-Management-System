@@ -4,12 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Posterminal;
-use App\Models\AddMedicine;
-use App\Models\Stock;
-use App\Models\Supplier;
-use Carbon\Carbon;
+use App\Models\Medicine;
+use Barryvdh\DomPDF\Facade\Pdf;
 
-class DashboardController extends Controller
+
+class SalesreportController extends Controller
 {
     /**
      * Display a listing of the resource.
