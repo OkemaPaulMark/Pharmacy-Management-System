@@ -38,7 +38,7 @@
                 <tfoot>
                     <tr>
                         <td colspan="5" class="text-right font-weight-bold">Grand Total:</td>
-                        <td id="grandTotal">$0.00</td>
+                        <td id="grandTotal">0.00</td>
                         <td>
                             <button id="checkoutBtn" class="btn btn-primary">Checkout</button>
                         </td>
@@ -81,7 +81,7 @@
                                 <option value="{{ $medicine->id }}"
                                         data-category="{{ $medicine->category_id }}"
                                         data-price="{{ $medicine->unit_price }}">
-                                    {{ $medicine->name }} - ${{ number_format($medicine->unit_price, 2) }}
+                                    {{ $medicine->name }} - {{ number_format($medicine->unit_price, 2) }}
                                 </option>
                             @endforeach
                         </select>
@@ -261,9 +261,9 @@ $(document).ready(function() {
                     <td>${index + 1}</td>
                     <td>${item.medicineName}</td>
                     <td>${item.categoryName}</td>
-                    <td>$${parseFloat(item.price).toFixed(2)}</td>
+                    <td>${parseFloat(item.price).toFixed(2)}</td>
                     <td>${item.quantity}</td>
-                    <td>$${item.total}</td>
+                    <td>${item.total}</td>
                     <td>${item.prescription || 'N/A'}</td>
                     <td>
                         <button class="btn btn-danger btn-sm remove-item" data-index="${index}">
@@ -274,7 +274,7 @@ $(document).ready(function() {
             `);
         });
 
-        $grandTotal.text('$' + grandTotal.toFixed(2));
+        $grandTotal.text('UGX' + grandTotal.toFixed(2));
 
         // Add event listener for remove buttons
         $('.remove-item').click(function() {
@@ -295,8 +295,8 @@ $(document).ready(function() {
                 <tr>
                     <td>${item.medicineName}</td>
                     <td>${item.quantity}</td>
-                    <td>$${parseFloat(item.price).toFixed(2)}</td>
-                    <td>$${item.total}</td>
+                    <td>${parseFloat(item.price).toFixed(2)}</td>
+                    <td>${item.total}</td>
                 </tr>
             `;
         });
@@ -324,15 +324,15 @@ $(document).ready(function() {
                 <tfoot>
                     <tr>
                         <td colspan="3" class="text-right">Subtotal:</td>
-                        <td>$${subtotal.toFixed(2)}</td>
+                        <td>${subtotal.toFixed(2)}</td>
                     </tr>
                     <tr>
                         <td colspan="3" class="text-right">Tax (10%):</td>
-                        <td>$${tax.toFixed(2)}</td>
+                        <td>${tax.toFixed(2)}</td>
                     </tr>
                     <tr>
                         <td colspan="3" class="text-right font-weight-bold">Total:</td>
-                        <td class="font-weight-bold">$${total.toFixed(2)}</td>
+                        <td class="font-weight-bold">UGX ${total.toFixed(2)}</td>
                     </tr>
                 </tfoot>
             </table>
