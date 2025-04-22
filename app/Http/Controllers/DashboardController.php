@@ -6,6 +6,8 @@ use App\Models\Posterminal;
 use App\Models\AddMedicine;
 use App\Models\Stock;
 use App\Models\Supplier;
+use App\Models\Category;
+use App\Models\Medicine;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
@@ -65,14 +67,19 @@ class DashboardController extends Controller
         // Chart Data
         $stocks = Stock::with('supplier')->get();
 
+        $categories = Category::all();
+        $medicines = AddMedicine::all();
+
         // Prepare chart data
         $chartData = $this->prepareChartData($stocks);
 
-        return view('pharmacist.dashboard.list', array_merge([
+        return view('pharmacist.dashboard.posterminal.index', array_merge([
             'todaySales' => $todaySales,
             'lowStockItems' => $lowStockItems,
             'expiringSoon' => $expiringSoon,
-            'totalStocks' => $totalStocks
+            'totalStocks' => $totalStocks,
+            'categories' => $categories,    
+            'medicines' => $medicines  
         ], $chartData));
     }
 

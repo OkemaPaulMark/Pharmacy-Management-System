@@ -11,12 +11,12 @@
 
   
   <!-- Dashboard -->
-  <li class="nav-item">
+  <!-- <li class="nav-item">
   <a class="nav-link" href="{{url('pharmacist/dashboard')}}">
       <i class="fas fa-fw fa-tachometer-alt"></i>
       <span>Dashboard</span>
     </a>
-  </li>
+  </li> -->
 
     <!-- Sales -->
     <li class="nav-item">
