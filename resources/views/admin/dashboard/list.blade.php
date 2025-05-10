@@ -1,4 +1,3 @@
-<!-- File: resources/views/admin/dashboard/list.blade.php -->
 @extends('admin.layouts.app')
 
 @section('title', 'Pharmacy M.S')
@@ -12,9 +11,6 @@
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between">
         <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-        <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-            <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
-        </a> -->
     </div>
 
     <!-- Content Row -->
@@ -23,6 +19,7 @@
             <div class="row min-vh-80 h-100">
                 <div class="col-12">
                     <div class="row">
+                        <!-- Today's Sales Card -->
                         <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
                             <div class="card shadow">
                                 <div class="card-body">
@@ -40,12 +37,14 @@
                                     </div>
                                     <h5 class="text-muted font-weight-normal">Today's Sales</h5>
                                     <div class="d-flex align-items-center align-self-start">
-                                        <h3 class="mb-0">@isset($todaySales){{ $todaySales }}@else 0 @endisset</h3>
+                                        <h3 class="mb-0">UGX @isset($todaySales){{ number_format($todaySales) }}@else 0 @endisset</h3>
                                     </div>
-                                    <p>Number of Medicine sales made today.</p>
+                                    <p>Total value of medicine sales made today.</p>
                                 </div>
                             </div>
                         </div>
+                        
+                        <!-- Low-Stock Items Card -->
                         <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
                             <div class="card shadow">
                                 <div class="card-body">
@@ -69,6 +68,8 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        <!-- Expiring Soon Card -->
                         <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
                             <div class="card shadow">
                                 <div class="card-body">
@@ -92,6 +93,8 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        <!-- Total Stocks Card -->
                         <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
                             <div class="card shadow">
                                 <div class="card-body">
